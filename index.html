@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARES-SALUS // BIO-STOCHASTIC CONTROL CENTER</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for futuristic, technical look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script src="app.js" defer></script>
+</head>
+<body class="crt-filter">
+    <!-- Overlay scanline grid for CRT screen effect -->
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <!-- HEADER STATUS BAR -->
+        <header>
+            <div class="header-logo">
+                <div class="pulse-indicator"></div>
+                <h1>ARES-SALUS <span class="subtitle">// MISSION EXTINCTION COUNTERMEASURE</span></h1>
+            </div>
+            
+            <div class="header-telemetry">
+                <div class="telemetry-item">
+                    <span class="label">ORBITAL:</span>
+                    <span class="value text-amber">MARS COLONY L4</span>
+                </div>
+                <div class="telemetry-item">
+                    <span class="label">ATMOSPHERE:</span>
+                    <span class="value text-green">101.3 kPa (STABLE)</span>
+                </div>
+                <div class="telemetry-item">
+                    <span class="label">HUMANITY REMAINING:</span>
+                    <span class="value text-red blink">894,201</span>
+                </div>
+            </div>
+
+            <div class="audio-control">
+                <button id="audio-toggle" class="btn btn-secondary">
+                    <span class="audio-icon">🔇</span> SYSTEM AUDIO OFF
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTROL HUD GRID -->
+        <main class="hud-grid">
+            
+            <!-- LEFT COLUMN: COHORT & DRUG SYNTHESIZER -->
+            <section class="hud-panel left-panel">
+                <div class="panel-header">
+                    <h2>[01] MOLECULAR SYNTHESIZER</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="synthesizer-card">
+                        <h3>DRUG PHARMACODYNAMICS</h3>
+                        
+                        <div class="input-group">
+                            <div class="input-label-container">
+                                <label for="drug-affinity">Receptor Binding Affinity</label>
+                                <span class="value-display" id="val-affinity">0.75</span>
+                            </div>
+                            <input type="range" id="drug-affinity" min="0.0" max="1.0" step="0.05" value="0.75">
+                            <span class="input-desc text-muted">Probability of drug successfully binding to pathogenic receptors.</span>
+                        </div>
+
+                        <div class="input-group">
+                            <div class="input-label-container">
+                                <label for="cell-penetration">Cellular Penetration</label>
+                                <span class="value-display" id="val-penetration">0.60</span>
+                            </div>
+                            <input type="range" id="cell-penetration" min="0.0" max="1.0" step="0.05" value="0.60">
+                            <span class="input-desc text-muted">Absorption coefficient through lipid bilayer.</span>
+                        </div>
+
+                        <div class="input-group">
+                            <div class="input-label-container">
+                                <label for="systemic-toxicity">Systemic Toxicity</label>
+                                <span class="value-display" id="val-toxicity">0.15</span>
+                            </div>
+                            <input type="range" id="systemic-toxicity" min="0.0" max="1.0" step="0.05" value="0.15">
+                            <span class="input-desc text-muted">Stochastic damage to virtual hepatic and renal cells.</span>
+                        </div>
+
+                        <div class="input-group">
+                            <div class="input-label-container">
+                                <label for="daily-dosage">Daily Dosage Intake</label>
+                                <span class="value-display" id="val-dosage">80 mg</span>
+                            </div>
+                            <input type="range" id="daily-dosage" min="10" max="200" step="5" value="80">
+                            <span class="input-desc text-muted">Accumulates agent level but triggers toxicity thresholds.</span>
+                        </div>
+                    </div>
+
+                    <div class="synthesizer-card">
+                        <h3>COHORT CONFIGURATION</h3>
+                        
+                        <div class="input-row">
+                            <div class="input-group half">
+                                <label for="cohort-size">Cohort Size</label>
+                                <input type="number" id="cohort-size" min="10" max="1000" value="250">
+                            </div>
+                            <div class="input-group half">
+                                <label for="pathogen-severity">Pathogen Severity</label>
+                                <select id="pathogen-severity">
+                                    <option value="0.25">LOW (Phobos-V1)</option>
+                                    <option value="0.55" selected>ELEVATED (Extinction Strain)</option>
+                                    <option value="0.85">LETHAL (Elysium Mutant)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="simulation-days">Trial Duration (Days)</label>
+                            <input type="range" id="simulation-days" min="10" max="45" value="30" step="1">
+                            <span class="value-display-inline" id="val-days">30 Days</span>
+                        </div>
+                    </div>
+
+                    <button id="run-btn" class="btn btn-primary btn-block">
+                        ⚡ RUN STOCHASTIC TRIAL
+                    </button>
+                </div>
+            </section>
+
+            <!-- MIDDLE COLUMN: BIOLOGICAL DIAGNOSTIC RADAR -->
+            <section class="hud-panel middle-panel">
+                <div class="panel-header">
+                    <h2>[02] BIOLOGICAL RADAR & BINDING SIMULATION</h2>
+                </div>
+                <div class="panel-body canvas-container">
+                    <div class="radar-scope">
+                        <canvas id="radar-canvas"></canvas>
+                        <div class="scope-crosshair"></div>
+                    </div>
+                    
+                    <div class="diagnostic-readout">
+                        <div class="readout-status">
+                            <span class="label">ENGINE STATE:</span>
+                            <span class="value text-green" id="engine-state">STANDBY</span>
+                        </div>
+                        <div class="readout-progress-bar">
+                            <div class="progress-fill" id="progress-bar-fill" style="width: 0%"></div>
+                        </div>
+                        <p class="readout-summary text-amber" id="trial-summary">Ready to initialize simulation of drug binding mechanisms on virtual cells.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT COLUMN: LIVE TELEMETRY & DIAGNOSTICS LOG -->
+            <section class="hud-panel right-panel">
+                <div class="panel-header">
+                    <h2>[03] REAL-TIME TELEMETRY</h2>
+                </div>
+                <div class="panel-body telemetry-body">
+                    
+                    <!-- Live Stats Widget -->
+                    <div class="stats-grid">
+                        <div class="stat-box border-green">
+                            <div class="stat-num text-green" id="stat-healthy">0</div>
+                            <div class="stat-label">HEALTHY</div>
+                        </div>
+                        <div class="stat-box border-amber">
+                            <div class="stat-num text-amber" id="stat-infected">0</div>
+                            <div class="stat-label">INFECTED</div>
+                        </div>
+                        <div class="stat-box border-red">
+                            <div class="stat-num text-red" id="stat-critical">0</div>
+                            <div class="stat-label">CRITICAL</div>
+                        </div>
+                        <div class="stat-box border-blue">
+                            <div class="stat-num text-blue" id="stat-recovered">0</div>
+                            <div class="stat-label">RECOVERED</div>
+                        </div>
+                        <div class="stat-box border-gray">
+                            <div class="stat-num text-gray" id="stat-deceased">0</div>
+                            <div class="stat-label">DECEASED</div>
+                        </div>
+                    </div>
+
+                    <!-- Telemetry SVG Charts -->
+                    <div class="chart-container">
+                        <h3>COHORT DISTRIBUTION TIMELINE</h3>
+                        <svg id="telemetry-chart" viewBox="0 0 500 180">
+                            <!-- Background grid -->
+                            <line x1="40" y1="20" x2="480" y2="20" stroke="#1d2024" stroke-dasharray="4" />
+                            <line x1="40" y1="60" x2="480" y2="60" stroke="#1d2024" stroke-dasharray="4" />
+                            <line x1="40" y1="100" x2="480" y2="100" stroke="#1d2024" stroke-dasharray="4" />
+                            <line x1="40" y1="140" x2="480" y2="140" stroke="#1d2024" stroke-dasharray="4" />
+                            <line x1="40" y1="150" x2="480" y2="150" stroke="#2a2e35" />
+                            <line x1="40" y1="10" x2="40" y2="150" stroke="#2a2e35" />
+
+                            <!-- Path groups -->
+                            <path id="path-active" d="" fill="none" stroke="#ffb300" stroke-width="2.5" />
+                            <path id="path-recovered" d="" fill="none" stroke="#00e676" stroke-width="2.5" />
+                            <path id="path-deceased" d="" fill="none" stroke="#ff1744" stroke-width="2.5" />
+                            
+                            <!-- Graph Labels -->
+                            <text x="35" y="25" text-anchor="end" fill="#607d8b" font-size="8">100%</text>
+                            <text x="35" y="85" text-anchor="end" fill="#607d8b" font-size="8">50%</text>
+                            <text x="35" y="150" text-anchor="end" fill="#607d8b" font-size="8">0%</text>
+                            <text x="260" y="170" text-anchor="middle" fill="#607d8b" font-size="9">Trial Duration (Days)</text>
+                        </svg>
+                        
+                        <div class="chart-legend">
+                            <span class="legend-item"><span class="legend-dot bg-amber"></span> Infected</span>
+                            <span class="legend-item"><span class="legend-dot bg-green"></span> Recovered</span>
+                            <span class="legend-item"><span class="legend-dot bg-red"></span> Deceased</span>
+                        </div>
+                    </div>
+
+                    <!-- Event Terminal Console -->
+                    <div class="terminal-container">
+                        <h3>STOCHASTIC BIOLOGICAL LOG</h3>
+                        <div class="terminal-screen" id="log-screen">
+                            <div class="log-line text-muted">SYS: Awaiting simulation telemetry input. Initialize trial.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+        
+        <!-- FOOTER DIAGNOSTICS -->
+        <footer>
+            <div class="footer-status">
+                <span class="blink">[🔴] RECORDING TELEMETRY</span>
+                <span>SYSTEM STATUS: <span class="text-green">ALL SYSTEMS ACTIVE</span></span>
+            </div>
+            <div class="footer-designation">
+                <span>PROJECT ARES-SALUS // DEEPMIND ANTIGRAVITY ENGINE</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

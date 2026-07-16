@@ -1,0 +1,22 @@
+# Go binary
+motor-estocastico
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go test binary
+*.test
+
+# Go build cache
+/vendor/
+/dist/
+
+# Environment
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
